@@ -5,7 +5,7 @@ import credentials from './credentials.json';
 type GEvent = {
   summary: string;
   description: string;
-  start: {
+  start: { 
     dateTime: string;
     timeZone: string;
   };
