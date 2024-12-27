@@ -1,25 +1,43 @@
 const pool = require("../config/db");
-const { Schema } = pool;
 
-const transactionSchema = new Schema(
-  {
+exports.transactionSchema = () => {
+  return {
     customer_number: {
-      type: String,
+      type: 'VARCHAR(10)',
       required: true,
-      index: true,
-      match: /^[0-9]{10}$/,
+      match: /^[0-9]{10}$/
     },
     mpesa_ref: {
-      type: String,
+      type: 'VARCHAR(10)',
       required: true,
-      index: true,
-      match: /^[A-Z0-9]{10}$/,
+      match: /^[A-Z0-9]{10}$/
     },
-    amount: { type: String, required: true },
+    amount: {
+      type: 'DECIMAL(10, 2)',
+      required: true
+    }
+  };
+};
+
+exports.Transaction = {
+  create: (data, callback) => {
+    const sql = `INSERT INTO transaction (phone, MpesaReceiptNumber, amount) VALUES (?, ?, ?)`;
+    pool.query(sql, [data.customer_number, data.mpesa_ref, data.amount], (error, results, fields) => {
+      if (error) {
+        return callback(error);
+      }
+      return callback(null, results);
+    });
   },
-  { timestamps: true }
-);
+  find: (callback) => {
+    const sql = `SELECT * FROM transaction`;
+    pool.query(sql, (error, results, fields) => {
+      if (error) {
+        return callback(error);
+      }
+      return callback(null, results);
+    });
+  }
+};
 
-const Transaction = pool.model("Transaction", transactionSchema);
-
-module.exports = Transaction;
+module.exports = exports.Transaction;

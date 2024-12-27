@@ -2,6 +2,60 @@
 
 const pool = require("../config/db");
 
+exports.createOrder = (
+  userId,
+  name,
+  phone,
+  email,
+  address,
+  orderNo,
+  items,
+  totalAmount,
+  paymentMethod
+) => {
+  return new Promise((resolve, reject) => {
+    pool.query(
+      "INSERT INTO orders (user_id, address, order_no, grand_total) VALUES (?, ?, ?, ?);",
+      [userId, address, orderNo, totalAmount],
+      (err, orderResult) => {
+        if (err) {
+          reject(err);
+        } else {
+          const orderId = orderResult.insertId;
+          const itemValues = items.map((item) => [
+            orderId,
+            item.product_id,
+            item.quantity,
+            item.price * item.quantity,
+          ]);
+
+          pool.query(
+            "INSERT INTO order_details (order_id, product_id, qty, grand_total) VALUES ?",
+            [itemValues],
+            (err, productsResult) => {
+              if (err) {
+                reject(err);
+              } else {
+                pool.query(
+                  "INSERT INTO transaction (name, email, phone, order_id, payment_method, amount) VALUES (?, ?, ?, ?, ?, ?)",
+                  [name, email, phone, orderId, paymentMethod, totalAmount],
+                  (err, transactionResult) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve({ orderId, orderResult, productsResult, transactionResult });
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+};
+
 exports.getAllOrders = () => {
   return new Promise((resolve, reject) => {
     pool.query(

@@ -3,47 +3,31 @@
 const productModel = require("../models/productModel");
 
 exports.getAllProducts = (req, res) => {
-  productModel
-    .getAllProducts()
-    .then((products) => {
-      res.json(products);
+  productModel.getAllProducts()
+    .then((result) => {
+      res.send(result);
     })
-    .catch((error) => {
-      console.error("Error fetching products:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send("Error fetching products.");
     });
 };
 
 exports.getProductDetailsById = (req, res) => {
   const productId = req.params.id;
-  productModel
-    .getProductDetailsById(productId)
+  productModel.getProductDetailsById(productId)
     .then((result) => {
       res.send(result);
     })
     .catch((err) => {
       console.error(err.message);
-      res.status(500).send("Error fetching product.");
-    });
-};
-
-exports.allOrderByProductId = (req, res) => {
-  const productId = req.params.id;
-  productModel
-    .allOrderByProductId(productId)
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.error(err.message);
-      res.status(500).send("Error fetching product.");
+      res.status(500).send("Error fetching product details.");
     });
 };
 
 exports.createProduct = (req, res) => {
-  const { name, price, description } = req.body;
-  productModel
-    .createProduct(name, price, description)
+  const newProduct = req.body;
+  productModel.createProduct(newProduct)
     .then((result) => {
       res.send(result);
     })
@@ -54,9 +38,8 @@ exports.createProduct = (req, res) => {
 };
 
 exports.updateProduct = (req, res) => {
-  const { id, name, price, description } = req.body;
-  productModel
-    .updateProduct(id, name, price, description)
+  const updatedProduct = req.body;
+  productModel.updateProduct(updatedProduct)
     .then((result) => {
       res.send(result);
     })
@@ -68,8 +51,7 @@ exports.updateProduct = (req, res) => {
 
 exports.deleteProduct = (req, res) => {
   const productId = req.params.id;
-  productModel
-    .deleteProduct(productId)
+  productModel.deleteProduct(productId)
     .then((result) => {
       res.send(result);
     })

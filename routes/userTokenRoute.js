@@ -1,7 +1,6 @@
 // cartRoutes.js
 
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const tokenController = require("../controller/tokenController");
 
 // Route to get refreshToken

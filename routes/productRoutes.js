@@ -1,17 +1,13 @@
 // productRoutes.js
-
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const productController = require("../controller/productController");
+// const authToken = require("../middleware/authToken");
 
 // Route to get all products
-router.get("/", productController.getAllProducts);
+router.get("/products", productController.getAllProducts);
 
 // Route to get product details by ID
 router.get("/:id", productController.getProductDetailsById);
-
-// Route to get all orders product details by ID
-router.get("/allOrderByProductId/:id", productController.allOrderByProductId);
 
 // Route to create a new product
 router.post("/create", productController.createProduct);
@@ -19,7 +15,9 @@ router.post("/create", productController.createProduct);
 // Route to update an existing product
 router.post("/update", productController.updateProduct);
 
-// Route to delete a product by ID
+// Route to delete a product
 router.delete("/delete/:id", productController.deleteProduct);
 
 module.exports = router;
+
+

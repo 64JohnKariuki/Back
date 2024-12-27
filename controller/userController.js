@@ -3,11 +3,10 @@
 const userModel = require("../models/userModel");
 
 exports.register = (req, res) => {
-  const { email, password, name } = req.body;
+  const newUser = req.body;
   userModel
-    .register(email, password, name)
+    .register(newUser)
     .then((result) => {
-      console.log("Successful Register");
       res.send(result);
     })
     .catch((err) => {
@@ -17,14 +16,39 @@ exports.register = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  const { email, password } = req.body;
+  const credentials = req.body;
   userModel
-    .login(email, password)
+    .login(credentials)
     .then((result) => {
       res.send(result);
     })
     .catch((err) => {
       console.error(err.message);
-      res.status(500).send("Error logging in.");
+      res.status(500).send("Error logging in user.");
+    });
+};
+
+exports.allUsers = (req, res) => {
+  userModel
+    .allUsers()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send("Error fetching users.");
+    });
+};
+
+exports.userDetails = (req, res) => {
+  const userId = req.user.id; // Assuming user ID is stored in the token
+  userModel
+    .getUserDetails(userId)
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.error(err.message);
+      res.status(500).send("Error fetching user details.");
     });
 };
