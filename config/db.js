@@ -1,7 +1,9 @@
 // database/connection.js
 const mysql = require("mysql");
+const dotenv =  require("dotenv");
+
+dotenv.config(); // Load environment variables from .env file
 // const mongoose = require("mongoose");
-require("dotenv").config(); // Load environment variables from .env file
 
 // mongoose.connect(process.env.MONGODB_URI); //MongoDB Connection String
 //
@@ -21,6 +23,13 @@ const pool = mysql.createConnection({
   password: "",
   database: "peapo",
 });
+
+// const pool = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USERNAME,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_DATABASE,
+// });
 
 pool.connect(function (error) {
   if (error) {

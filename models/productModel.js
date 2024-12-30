@@ -65,7 +65,7 @@ exports.createProduct = (name, price, description) => {
 exports.updateProduct = (productId, name, price, description) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "UPDATE products SET name = ?, price = ?, description = ? WHERE pro_id = ?",
+      "UPDATE products SET name = ?, price = ?, description = ? WHERE product_id = ?",
       [name, price, description, productId],
       (err, result) => {
         if (err) {
@@ -81,7 +81,7 @@ exports.updateProduct = (productId, name, price, description) => {
 exports.deleteProduct = (productId) => {
   return new Promise((resolve, reject) => {
     pool.query(
-      "DELETE FROM products WHERE pro_id = ?",
+      "DELETE FROM products WHERE product_id = ?",
       [productId],
       (err, result) => {
         if (err) {

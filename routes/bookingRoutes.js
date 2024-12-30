@@ -5,7 +5,7 @@ const bookingController = require("../controller/bookingController");
 // const authToken = require("../middleware/authToken");
 
 // Route to create an booking
-router.post("/create", bookingController.createBooking);
+router.post("/createBooking", bookingController.createBooking);
 
 // Route to get all bookings
 router.get("/all", bookingController.getAllBookings);
